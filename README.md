@@ -1,6 +1,5 @@
 ﻿FTools
 ======
 
-Front-end automation tools based on Autohotkey
+An automation tools for Front-end Developer based on Autohotkey.
 
-Just a Test! 20120926190951
