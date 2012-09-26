@@ -5,7 +5,7 @@ An automation tools for Front-end Developer based on Autohotkey.
 
 ##目录结构：
 
-*resource	
++resource	
 对应程序所需要的外部资源
 
 *config.ini	
