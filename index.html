@@ -1,78 +1,129 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>FTools by yevolcn</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+    <title>FTools by yevolcn</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/yevolcn/FTools">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/yevolcn/FTools/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/yevolcn/FTools/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <header>
+      <div class="inner">
+        <h1>FTools</h1>
+        <h2>An automation tools for Front-end Developer based on Autohotkey.</h2>
+        <a href="https://github.com/yevolcn/FTools" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
           <h1>FTools</h1>
-          <p>An automation tools for Front-end Developer based on Autohotkey.</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/yevolcn">yevolcn</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
-        </div>
 
-        <h2>目录结构：</h2>
+<h3>An automation tools for Front-end Developer based on Autohotkey.</h3>
+
+<h4>下载地址：<a href="http://yevolcn.github.com/FTools/">http://yevolcn.github.com/FTools/</a>
+</h4>
+
+<h2>目录结构：</h2>
 
 <ul>
 <li><p>resource<br>
 对应程序所需要的外部资源</p></li>
+<li><p>icon.ico<br>
+程序的图标文件</p></li>
 <li><p>config.ini<br>
-配置文件（快捷键等）</p></li>
-<li><p>StartLists.ini
+配置文件（快捷键、程序路径等）</p></li>
+<li><p>StartLists.ini<br>
 一键打开目录、程序 配置文件</p></li>
-<li><p>FTools.ahk
-程序文件</p></li>
-<li><p>FTPv2.ahk
+<li><p>Ftp_Info.ini<br>
+FTP配置文档，放置于需要开启此功能的根目录下</p></li>
+<li><p>FTPv2.ahk 
 FTP类库</p></li>
-<li><p>FTools.exe
-已编译的可执行程序</p></li>
-</ul><hr><h2>功能列表 :</h2>
+<li><p>FTools.ahk<br>
+主程序文件</p></li>
+<li><p>FTools.exe<br>
+主程序已编译的可执行程序</p></li>
+<li><p>Update.ahk<br>
+更新程序文件</p></li>
+<li><p>Update.exe<br>
+更新程序已编译的可执行程序</p></li>
+</ul><h2>功能列表 :</h2>
 
 <ul>
-<li><p>StartWork
-通过配置StartLists.ini，写入要打开的目录、文件列表，即可实现一键打开</p></li>
-<li><p>PickColor
-（下一版本即将废弃）</p></li>
-<li><p>BuildShortcut
-选中文件，按下快捷键，即可创建文件快捷方式到指定目录，方便 Win+R 打开</p></li>
-<li><p>ImgDemo（内* 网使用）
-输入诸如100x200的字符串，选中，按下快捷键，即可生成<img src="http://ppms.paipaioa.com/img/demo/100x200.png" alt="img">，并在服务器端建立对应的图片文件</p></li>
-<li><p>ImgComp* ress
-开启后，按下快捷键即可对图片进行无损压缩处理。在开启状态下，通过FTPupload上传图片也会进行相应的无损压缩。</p></li>
-<li><p>TimeS* tamp
-按下快捷键，即可生成诸如“20120926195828”之类的时间戳字符串</p></li>
+<li><p>StartWork<br>
+需**配置StartLists.ini**，写入要打开的目录、文件列表，即可实现一键打开</p></li>
+<li><p>PickColor<br>
+（正式版本中将废弃）</p></li>
+<li><p>BuildShortcut<br>
+选中文件，按下快捷键，即可**创建文件快捷方式**到指定目录，方便 Win+R 打开</p></li>
+<li><p>ImgDemo（内网使用）<br>
+输入诸如**100x200**的字符串，选中，按下快捷键，即可生成<code>&lt;img src="http://ppms.paipaioa.com/img/demo/100x200.png" / &gt;</code>，并在**服务器端建立**对应的图片文件</p></li>
+<li><p>ImgCompress<br>
+开启后，按下快捷键即可对图片进行**无损压缩**处理。在开启状态下，通过FTPupload上传图片也会进行相应的无损压缩</p></li>
+<li><p>TimeStamp<br>
+按下快捷键，即可生成诸如“20120926195828”的**时间戳字符串**</p></li>
+<li><p>CopyPath<br>
+选中文件（或文件列表），按下快捷键，即可将文件（或文件列表）**路径**复制进剪贴板</p></li>
+<li><p>CopyName<br>
+选中文件（或文件列表），按下快捷键，即可将文件（或文件列表）**名称**复制进剪贴板</p></li>
+<li><p>CopyURL<br>
+需**配置Ftp_info.ini中的URL项**，选中文件（或文件列表），按下快捷键，即可将文件（或文件列表）**对应的URL地址**复制进剪贴板</p></li>
+<li><p>QuickOpen<br>
+选中欲打开的**文件（或文件夹）地址**，按下快捷键，即可打开对应地址</p></li>
+<li><p>QuickSearch<br>
+选中欲查询的**字符串**，按下快捷键，即可通过浏览器打开对应的**搜索引擎**进行查询（需在Setting中配置搜索引擎类型）</p></li>
+<li><p>AlwaysTop<br>
+在窗口标题栏区域，同时按下**Ctrl和鼠标中键**，即可将当前**窗口置顶**（再次按下取消置顶）</p></li>
+<li><p>Transparency<br>
+在窗口标题栏区域，**鼠标上下滚轮**，即可对当前窗口进行**透明度调节**</p></li>
+<li><p>FTPUpload<br>
+需**配置Ftp_info.ini**，选中文件，按下快捷键，即可将**文件上传**至相应位置</p></li>
+<li><p>FTPDelete<br>
+需**配置Ftp_info.ini**，选中文件，按下快捷键，即可同时**删除本地和FTP相应文件**</p></li>
+<li><p>FTPCompare<br>
+需**配置Ftp_info.ini**，选中文件，按下快捷键，即可将**本地文件和FTP相应文件进行对比**（需在Setting中配置BeyondCompare程序路径）</p></li>
+<li><p>FTPTimeStamp_wg（内网使用）<br>
+选中css文件，按下快捷键，即可在dev环境中**压缩生成.min.css文件**，同时**生成对应的时间戳文件**，并将相应文件列表复制进剪贴板</p></li>
+<li><p>About<br>
+打开FTools的**说明**页面</p></li>
+<li><p>Update<br><strong>更新</strong>FTools版本</p></li>
+<li><p>Setting<br>
+配置FTools中的**操作快捷键和参数**，并设置**功能是否开启**（可见）</p></li>
+<li><p>Reload<br>
+重新打开程序</p></li>
+<li><p>Exit<br>
+退出程序</p></li>
 </ul>
-      </section>
+        </section>
 
+        <aside id="sidebar">
+          <a href="https://github.com/yevolcn/FTools/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/yevolcn/FTools/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/yevolcn/FTools"></a> is maintained by <a href="https://github.com/yevolcn">yevolcn</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+
+  
   </body>
 </html>
