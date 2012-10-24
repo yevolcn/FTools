@@ -18,8 +18,9 @@
 #SingleInstance, Force ;保证程序单例运行
 ;#NoTrayIcon
 
-VerCurrent = 0.9.2.6 ;定义当前版本号
-UpdateURL = http://10.6.206.12/FTools/
+VerCurrent = 0.9.6.1 ;定义当前版本号
+UpdateURL = http://ecd.ecc.com/FTools/
+;UpdateURL = http://localhost.kp/FTools/
 
 ;S 公共函数 检测配置文件配置项
 CheckConfig(key,section,default)
@@ -53,7 +54,7 @@ SentToRecord(Function,Parameter)
 	global UpdateURL
 	BaseURL = %UpdateURL%index.php/count/
 	WebRequest := ComObjCreate("WinHttp.WinHttpRequest.5.1")
-	RecordURL = %BaseURL%%Function%?%Parameter%&user=%A_UserName%&ip=%A_IPAddress1%&version=%VerCurrent%
+	RecordURL = %BaseURL%%Function%?%Parameter%&user=%A_UserName%&ip=%A_IPAddress1%&version=%VerCurrent%&os=%A_OSVersion%
 	;MsgBox,%RecordURL%
 	WebRequest.Open("GET", RecordURL)
 	WebRequest.Send()
@@ -692,9 +693,17 @@ If gs_StartWork=1
 	Loop
 	{
 		FileReadLine,line,%A_ScriptDir%\StartLists.ini,%A_Index%
+		FirstChar := SubStr(line, 1 ,1)
 		If ErrorLevel
 			Break
+
+		If(FirstChar == ";")
+		{
+			;ToolTip, %line% 遇到注释行，跳过
+			Continue
+		}
 		Run,%line%
+		;MsgBox,%line%
 		ToolTip,%line%已打开
 		Sleep, 1000
 	}
@@ -824,11 +833,10 @@ Return
 ImgDemo:
 If gs_ImgDemo=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
 	Send ^c
 	url:="http://ppms.paipaioa.com/php/imgDemo.php?size="
 	url.=Clipboard
+	imgSize:=Clipboard
 	;MsgBox,%url%
 	IfNotExist,C:\ImgDemoTemp
 	{
@@ -838,7 +846,7 @@ If gs_ImgDemo=1
 	;Sleep,6000
 	FileDelete,C:\ImgDemoTemp\%Clipboard%.jpg
 	url_new = http://ppms.paipaioa.com/img/demo/%Clipboard%.png
-	url_new_img =`<img src`=`"http://ppms.paipaioa.com/img/demo/%Clipboard%.png`" alt`=`"img`" `/ `>
+	url_new_img =`<img src`=`"http://ppms.paipaioa.com/img/demo/%Clipboard%.png`" `/ `>
 	Clipboard:=url_new_img
 	ClipWait,1000
 	;MsgBox,%Clipboard%
@@ -846,6 +854,8 @@ If gs_ImgDemo=1
 	FileRemoveDir,C:\ImgDemoTemp,1
 	Clipboard:=url_new
 	Sleep,2000
+	Parameter = fname=%A_ThisLabel%&fcnt=%imgSize%
+	SentToRecord("useRecord",Parameter)
 	Return
 
 }
@@ -875,8 +885,6 @@ Return
 ImgCompress:
 If gs_ImgCompress=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
 
 	Clipboard_old :=Clipboard
 	Clipboard =
@@ -884,6 +892,9 @@ If gs_ImgCompress=1
 	ClipWait,1000
 
 	Gosub,SubImgCompress
+
+	Parameter = fname=%A_ThisLabel%&fcnt=%FileName%[%FileSizeOld%/%FileSizeNew%/%CompressK%]
+	SentToRecord("useRecord",Parameter)
 
 	Return
 
@@ -1281,8 +1292,7 @@ Return
 FTPupload:
 If gs_FTPupload=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
+
 
 	Gosub,GetFileListsAndImgCompress
 
@@ -1291,6 +1301,9 @@ If gs_FTPupload=1
 	Gosub,ReadFtpInfo
 
 	Gosub,UploadFile
+
+	Parameter = fname=%A_ThisLabel%&fcnt=%Document%%File_name%[%Server%:%Port%]
+	SentToRecord("useRecord",Parameter)
 
 	Return
 }
@@ -1319,8 +1332,6 @@ Return
 FTPDelete:
 If gs_FTPDelete=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
 
 	Gosub,GetFileLists
 
@@ -1329,6 +1340,9 @@ If gs_FTPDelete=1
 	Gosub,ReadFtpInfo
 
 	Gosub,DeleteFile
+
+	Parameter = fname=%A_ThisLabel%&fcnt=%Document%%File_name%[%Server%:%Port%]
+	SentToRecord("useRecord",Parameter)
 
 	Return
 }
@@ -1357,8 +1371,6 @@ Return
 FTPCompare:
 If gs_FTPCompare=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
 
 	Gosub,GetFileLists
 
@@ -1367,6 +1379,9 @@ If gs_FTPCompare=1
 	Gosub,ReadFtpInfo
 
 	Gosub,CompareFile
+
+	Parameter = fname=%A_ThisLabel%&fcnt=%Document%%File_name%[%Server%:%Port%]
+	SentToRecord("useRecord",Parameter)
 
 	Return
 }
@@ -1395,8 +1410,6 @@ Return
 FTPTimeStamp_wg:
 If gs_FTPTimeStamp_wg=1
 {
-	Parameter = fname=%A_ThisLabel%
-	SentToRecord("useRecord",Parameter)
 
 	Gosub,GetFileLists
 
@@ -1422,6 +1435,9 @@ If gs_FTPTimeStamp_wg=1
 
 	TrayTip,FTools Tips,亲，以下文件列表已经复制到剪贴板：`n%updateFileLists% ,300
 
+	Parameter = fname=%A_ThisLabel%&fcnt=%Sub_Path%%File_Name%
+	SentToRecord("useRecord",Parameter)
+
 	Return
 }
 Else
@@ -1441,8 +1457,20 @@ update:
 	TrayTip,,正在获取最新版本号，请稍等片刻……
 	URLDownloadToFile,%UpdateURL%version.php,version
 	FileRead,VerLastest,version
+	FileRead,UpdateDetailTitle,version
+	FileRead,UpdateDetailContent,version
+
 	Regular=(?<=<h1>)\S+(?=</h1>)
 	RegExMatch(VerLastest,Regular,VerLastest)
+
+	Regular2=(?<=<p class="UpdateDetailTitle">)\S+(?=</p>)
+	RegExMatch(UpdateDetailTitle,Regular2,UpdateDetailTitle)
+
+	Regular3=(?<=<p class="UpdateDetailContent">)\S+(?=</p>)
+	RegExMatch(UpdateDetailContent,Regular3,UpdateDetailContent)
+
+	StringReplace,UpdateDetailContent,UpdateDetailContent,<br>,`n,1
+
 	If ( StrLen(VerLastest) <1  )
 	{
 		TrayTip,,
@@ -1453,7 +1481,7 @@ update:
 		If (VerCurrent < VerLastest)
 		{
 			TrayTip,,
-			MsgBox,4,FTools有新版本啦,FTools有新版本啦，是否更新?`n(当前版本为：%VerCurrent%，最新版本为：%VerLastest%)
+			MsgBox,4,FTools有新版本啦,FTools有新版本啦，是否更新?`n【当前版本为：%VerCurrent%，最新版本为：%VerLastest%】`n`n%UpdateDetailTitle%`n%UpdateDetailContent%
 			IfMsgBox Yes
 			{
 				Run,%A_ScriptDir%/update.exe
@@ -1462,7 +1490,7 @@ update:
 			}
 			Else
 			{
-				MsgBox,0,取消更新,亲，最新版本有更多的功能哦~`n（您可通过点击托盘菜单“更新”来再次更新）
+				MsgBox,0,取消更新,亲，最新版本有更多的功能哦~`n（您可通过点击托盘菜单“Update”来再次更新）
 
 			}
 
@@ -1489,8 +1517,20 @@ CheckUpdate:
 	;getVerUrl:=http://w3c.im/FTools/version.php?VerCurrent=%VerCurrent%
 	URLDownloadToFile,%UpdateURL%version.php,version
 	FileRead,VerLastest,version
+	FileRead,UpdateDetailTitle,version
+	FileRead,UpdateDetailContent,version
+
 	Regular=(?<=<h1>)\S+(?=</h1>)
 	RegExMatch(VerLastest,Regular,VerLastest)
+
+	Regular2=(?<=<p class="UpdateDetailTitle">)\S+(?=</p>)
+	RegExMatch(UpdateDetailTitle,Regular2,UpdateDetailTitle)
+
+	Regular3=(?<=<p class="UpdateDetailContent">)\S+(?=</p>)
+	RegExMatch(UpdateDetailContent,Regular3,UpdateDetailContent)
+
+	StringReplace,UpdateDetailContent,UpdateDetailContent,<br>,`n,1
+
 	If ( StrLen(VerLastest) <1  )
 	{
 		;TrayTip,,
@@ -1501,7 +1541,7 @@ CheckUpdate:
 		If (VerCurrent < VerLastest)
 		{
 			TrayTip,,
-			MsgBox,4,FTools有新版本啦,FTools有新版本啦，是否更新?`n(当前版本为：%VerCurrent%，最新版本为：%VerLastest%)
+			MsgBox,4,FTools有新版本啦,FTools有新版本啦，是否更新?`n【当前版本为：%VerCurrent%，最新版本为：%VerLastest%】`n`n%UpdateDetailTitle%`n%UpdateDetailContent%
 			IfMsgBox Yes
 			{
 				Run,%A_ScriptDir%/update.exe
@@ -1534,7 +1574,7 @@ About:
 	Parameter = fname=%A_ThisLabel%
 	SentToRecord("useRecord",Parameter)
 
-	Run,%UpdateURL%version.php?VerCurrent=%VerCurrent%
+	Run,http://yevolcn.github.com/FTools/
 Return
 
 ;=======================================================================
