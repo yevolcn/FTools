@@ -10,20 +10,32 @@
 * resource	
 对应程序所需要的外部资源
 
+* icon.ico	
+程序的图标文件
+
 * config.ini	
-配置文件（快捷键等）
+配置文件（快捷键、程序路径等）
 
 * StartLists.ini	
 一键打开目录、程序 配置文件
 
-* FTools.ahk	
-主程序文件
+* Ftp_Info.ini		
+FTP配置文档，放置于需要开启此功能的根目录下
 
 * FTPv2.ahk	
 FTP类库
 
+* FTools.ahk	
+主程序文件
+
 * FTools.exe	
-已编译的可执行程序
+主程序已编译的可执行程序
+
+* Update.ahk	
+更新程序文件
+
+* Update.exe	
+更新程序已编译的可执行程序
 
 
 ##功能列表 :
