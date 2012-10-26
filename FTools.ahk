@@ -2006,6 +2006,7 @@ CheckPath:
 	IfNotExist,%File_Path_Result%Ftp_Info.ini
 	{
 		MsgBox,FTools Tips,亲，实在找不到配置文件了，你确定配置了么？
+		MsgBox,%File_Path_Result%
 	}
 
 
@@ -2054,20 +2055,25 @@ GetFileListsAndImgCompress:
         return
     }
 
-	If ( fs_ImgCompress==1 && gs_ImgCompress==1 )
-	{
-		;MsgBox,开始压缩图片
-
-		Gosub,SubImgCompress
-
-		Sleep,2000
-	}
+	File_Address =
 
     StringSplit,File_Address,clipboard,%value%
 
-    SplitPath,File_Address1,,File_Path ;获取文件完整路径File_Path(不包含文件名)
+    SplitPath,File_Address1,File_Name,File_Path ;获取文件完整路径File_Path(不包含文件名)
+
+	StringSplit,FileNameSplit,File_Name,`. ;取出文件名FileNameSplit1（不含后缀），后缀名FileNameSplit2
 
     global File_Path
+
+	If ( fs_ImgCompress==1 && gs_ImgCompress==1 )
+	{
+		if(FileNameSplit2 == "jpg" || FileNameSplit2 == "png")
+		{
+			;MsgBox,开始压缩图片
+			Gosub,SubImgCompress
+			Sleep,2000
+		}
+	}
 
     ;MsgBox,一共有%File_Address0%个文件开始上传
 
@@ -2106,6 +2112,7 @@ SubImgCompress:
 	Else
 	{
 		;TrayTip,FTools ImgCompress,亲，只有JPG 或 PNG 文件可以压缩哦~!,2000
+		;MsgBox,%Clipboard%
 		Clipboard := Clipboard_old
 	}
 	Return
